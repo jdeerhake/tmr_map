@@ -1,0 +1,93 @@
+Topex Microwave Radiometer Replacement Product - Version 1.0
+------------------------------------------------------------
+Date: December 13, 2006
+
+The Topex Microwave Radiometer (TMR) replacement product, version 1.0,
+is intended as an interim product for use with the version B Topex
+MGDRs while a new Topex/Poseidon GDR is being generated. The new GDR
+will contain the TMR data provided in this replacement product.
+The TMR replacement product was generated after a recalibration of the
+TMR for the entire Topex/Poseidon mission by Shannon Brown at JPL.
+
+Users are advised that there is a scale difference between the
+TMR path delays on this TMR replacement product and the JMR path delays
+on the Jason-1 Version B I/GDRs. Cross-mission consistency can be
+approximated by dividing the JMR path delays on the Jason-1 version B GDRs
+by 1.023. This scale difference causes the mean JMR path delay to be wetter
+by 4-6 mm than the mean TMR path delay on the TMR replacement product.
+Recalibration of the JMR is ongoing to ensure that the TMR and JMR
+are consistently calibrated.
+
+The TMR replacement product is provided as binary pass files labeled
+TMR_Cccc_Pppp, where ccc is the cycle number and ppp is the pass number,
+e.g. TMR_C033_P002 for cycle 33, pass 2. Each record in a pass file has a
+one to one correspondence with each record on the Topex/Poseidon Version
+B MGDR pass files, as they were available at the PODAAC ftp site as of
+November 30, 2006.
+
+All pass files have big-endian byte ordering (e.g. HP, Sun), and require
+byte swapping on a Linux machine to convert to little-ending
+byte ordering. The provided read software should do this automatically.
+
+This TMR replacement product is available by anonymous ftp to:
+ftp://poseidon.jpl.nasa.gov/pub/sandbox/products/topex_tmr/
+There are three subdirectories:
+1) doc - Contains documentation, including ASCII and PDF versions of this
+   README file.
+2) software - Contains read software for the data files (see below).
+3) data - Contains the pass files separated by cycle in subdirectories labeled
+   TMR_ccc (ccc = Cycle number)
+Pass files can be downloaded individually, or they can be downloaded by
+cycle. For example to download all of cycle 479 pass files use the following
+ftp command when in the pub/sandbox/products/topex_tmr/data subdirectory:
+get TMR_479.tar
+In this example, the entire cycle 479 directory will be downloaded as
+a tar file.
+
+Each record in the pass file provides the time tag, latitude, longitude,
+altimeter surface type, radiometer surface type, TMR_Bad quality
+flag, TMR instrument state flag, and all available geophysical
+measurements from the TMR. Provided geophysical measurements
+include the 3 brightness temperatures, wet path delay, 2-way sigma0
+atmospheric attenuation, wind speed, water vapor and liquid water content.
+The time tag, latitude, longitude, altimeter surface type, and
+radiometer instrument state flag have been copied from the Version B
+MGDRs. The radiometer surface type has been computed from the same
+land/sea mask that is currently used for the Jason-1 data products,
+and may differ from the value provided on the Topex/Poseidon MGDRs.
+The value of the flag TMR_Bad has been recomputed based on the reprocessed
+data, and can differ from that provided on the MGDRs. However,
+the parameter TMR_Bad is defined in the same way as is documented in
+the handbook for the Topex/Poseidon MGDRs (namely, 0 = Good, 1 = Fair,
+2 = Poor and 3 = Bad).
+
+Default values for all parameters are the maximum available value of
+the integer type.  For example, short integers have a default value of 32767.
+Default values are set when the parameter cannot be computed
+(e.g. path delay is set to default over land).
+
+Read software is provided and has been tested on the following platforms:
+Linux
+SunOS
+
+The primary C function and header file needed to read the replacement
+product are:
+r1cor.c
+r1cor.h
+
+Sample C software to read the pass files from the TMR replacement product
+is provided as:
+readtmrrp.c
+This program utilizes the functions in r1cor.c and the header file r1cor.h.
+
+This header file indicates the units of each parameter.
+A sample Makefile to compile these C functions is also provided, and
+creates the executable readtmrrp.
+
+Sample output from this program is provided for cycle 126, pass 1,
+and provided in tmr_c126_p001.dump when executing the
+program as follows:
+readtmrrp TMR_C126_P001
+
+Questions should be referred to Shailen Desai
+(Shailen.Desai@jpl.nasa.gov).

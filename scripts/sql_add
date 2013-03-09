@@ -1,0 +1,20 @@
+#!/bin/bash
+for nextDir in `ls /home/jdeerhake/tmr_data/binary`
+do
+
+echo =============================================================================
+echo Directory $nextDir.
+echo =============================================================================
+echo
+
+
+for nextFile in `ls /home/jdeerhake/tmr_data/binary/$nextDir`
+do
+
+echo $nextFile
+
+/home/jdeerhake/Repositories/tmr_mapper/sw/readtmrrp /home/jdeerhake/tmr_data/binary/$nextDir/$nextFile > /home/jdeerhake/Desktop/data
+mysqlimport -s --user='root' --fields-terminated-by=0x2C --lines-terminated-by=0x0a tmr_data '/home/jdeerhake/Desktop/data'
+
+done
+done
